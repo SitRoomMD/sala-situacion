@@ -179,3 +179,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    _fin = time.time() + float(os.environ.get("DURACION_MIN", "0")) * 60
+    while time.time() + int(os.environ.get("INTERVALO_S", "120")) < _fin:
+        time.sleep(int(os.environ.get("INTERVALO_S", "120")))
+        main()
