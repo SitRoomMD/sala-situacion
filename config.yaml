@@ -37,7 +37,7 @@ fuentes:
     query: '(México OR CDMX) (atentado OR "coche bomba" OR masacre OR "toque de queda" OR "estado de emergencia" OR "alerta sísmica" OR terremoto OR huracán OR "aeropuerto cerrado" OR magnicidio OR "ataque con drones")'
     hl: es-419
     gl: MX
-    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
+    incluir: [atentad, "coche bomba", masacre, "toque de queda", "estado de emergencia", "alerta sísmica", terremoto, huracán, aeropuerto, magnicidio, dron, "ataque con explosivos"]
 
   - nombre: Europa Press
     lector: rss
