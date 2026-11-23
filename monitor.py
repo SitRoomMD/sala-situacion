@@ -153,10 +153,10 @@ def leer(f):
 
 def pasa(i, f, cfg):
     txt = norm(i["titulo"] + " " + i["resumen"])
-    if any(norm(k) in txt for k in cfg.get("excluir_siempre", []) + f.get("excluir", [])):
+    if any(re.search(r"\b" + re.escape(norm(k)), txt) for k in cfg.get("excluir_siempre", []) + f.get("excluir", [])):
         return False
     inc = [norm(k) for k in f.get("incluir", [])]
-    if inc and not any(k in txt for k in inc):
+    if inc and not any(re.search(r"\b" + re.escape(k), txt) for k in inc):
         return False
     if f.get("magnitud_minima") is not None and (i["mag"] is None or float(i["mag"]) < float(f["magnitud_minima"])):
         return False
