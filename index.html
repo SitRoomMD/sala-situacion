@@ -22,6 +22,7 @@ h1{margin:0;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:v
 .main{display:grid;grid-template-rows:62% 38%;min-height:0}
 .wall{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:6px;padding:6px;min-height:0}
 #map{margin:0 6px 6px;border:1px solid var(--line);border-radius:6px;background:#0e1a1c}
+.oscuro{filter:invert(1) hue-rotate(180deg) brightness(.85) contrast(.9)}
 .leaflet-popup-content{font:13px/1.35 -apple-system,system-ui,sans-serif}
 .leaflet-popup-content a{color:#8a4a26}
 .tile{position:relative;background:#000;border:1px solid var(--line);border-radius:6px;overflow:hidden;min-height:0}
@@ -161,7 +162,7 @@ const COLOR={4:"#f2867e",5:"#f2867e",3:"#e0a04a",2:"#8fa7a5"};
 function iniciarMapa(){
   if(mapa||!window.L) return;
   mapa=L.map("map",{worldCopyJump:true}).setView([40,-20],2);
-  L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",{maxZoom:18,attribution:'&copy; OpenStreetMap &copy; CARTO'}).addTo(mapa);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:18,className:"oscuro",attribution:'&copy; OpenStreetMap'}).addTo(mapa);
   capa=L.layerGroup().addTo(mapa);
 }
 function punto(m){
