@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Sala de situación</title>
+<style>
+:root{--bg:#0b1416;--panel:#11201f;--line:#21403f;--ink:#e3eeec;--muted:#8fa7a5;--accent:#d9a27c;--hi:#f2867e;--mid:#e0a04a;--ok:#5dcaa5}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:14px/1.4 -apple-system,"Segoe UI",system-ui,sans-serif}
+header{display:flex;align-items:center;gap:18px;padding:8px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+h1{margin:0;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.clocks{display:flex;gap:16px;font-variant-numeric:tabular-nums}
+.clocks b{font-size:16px;display:block}
+.clocks span{font-size:11px;color:var(--muted)}
+.state{margin-left:auto;font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.dot.on{background:var(--ok)}
+.layout{display:grid;grid-template-columns:1fr 380px;height:calc(100% - 52px)}
+.wall{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:1fr;gap:6px;padding:6px;min-height:0}
+.tile{position:relative;background:#000;border:1px solid var(--line);border-radius:6px;overflow:hidden;min-height:0}
+.tile iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.tile select{position:absolute;top:6px;left:6px;z-index:2;background:rgba(11,20,22,.85);color:var(--ink);border:1px solid var(--line);border-radius:4px;padding:3px 6px;font:inherit;font-size:12px}
+.side{border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.side h2{margin:0;padding:10px 12px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.side h2 button{background:none;border:1px solid var(--line);color:var(--muted);border-radius:4px;font:inherit;font-size:11px;padding:2px 6px;cursor:pointer}
+.feed{flex:1;overflow-y:auto;padding:6px 8px}
+.alert{border-left:3px solid var(--muted);background:var(--panel);border-radius:4px;padding:7px 9px;margin-bottom:6px}
+.alert.p4,.alert.p5{border-left-color:var(--hi)}
+.alert.p3{border-left-color:var(--mid)}
+.alert .t{font-weight:600}
+.alert .m{color:var(--muted);font-size:13px}
+.alert .w{font-size:11px;color:var(--muted);margin-top:3px}
+.alert a{color:var(--accent)}
+.alert.new{animation:flash 2.5s ease-out}
+@keyframes flash{from{background:#3a2a1e}to{background:var(--panel)}}
+.setup{padding:14px;color:var(--muted)}
+.setup input{width:100%;padding:8px;margin:8px 0;background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:4px;font:inherit}
+.setup button{padding:8px 12px;background:var(--accent);border:0;border-radius:4px;font:inherit;font-weight:600;cursor:pointer}
+.tiktok{border-top:1px solid var(--line);max-height:42%;overflow-y:auto}
+@media (max-width:900px){
+  .layout{grid-template-columns:1fr;height:auto}
+  .wall{grid-template-columns:1fr;grid-auto-rows:56vw}
+  .side{border-left:0;border-top:1px solid var(--line);height:80vh}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Sala de situación</h1>
+  <div class="clocks" id="clocks"></div>
+  <div class="state"><span class="dot" id="dot"></span><span id="stxt">Desconectado</span></div>
+</header>
+<div class="layout">
+  <section class="wall" id="wall" aria-label="Canales en directo"></section>
+  <aside class="side">
+    <h2>Alertas en directo <button id="reset" type="button" title="Cambiar canal de alertas">Canal</button></h2>
+    <div class="feed" id="feed"></div>
+    <div class="tiktok">
+      <h2>Motion Media: geopolítica en 60 s</h2>
+      <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@motionmedialabs" data-unique-id="motionmedialabs" data-embed-type="creator" style="max-width:780px;min-width:288px;margin:0">
+        <section><a target="_blank" rel="noopener" href="https://www.tiktok.com/@motionmedialabs">@motionmedialabs</a></section>
+      </blockquote>
+    </div>
+  </aside>
+</div>
+<script async src="https://www.tiktok.com/embed.js"></script>
+<script>
+(function(){
+"use strict";
+// Canales con emisión gratuita y continua en YouTube (cambiables en cada pantalla)
+const CHANNELS=[
+  ["Sky News (Reino Unido)","UCoMdktPbSTixAyNGwb-UYkQ"],
+  ["Al Jazeera English","UCNye-wNBqNL5ZzHSJj3l8Bg"],
+  ["France 24 Español","UCUdOoVWuWmgo1wByzcsyKDQ"],
+  ["France 24 English","UCQfwfsi5VrQ8yKZ-UWmAEFg"],
+  ["DW News","UCknLrEdhRCp1aegoMqRaCZg"],
+  ["DW Español","UCT4Jg8h03dD0iN3Pb5L0PMA"],
+  ["Euronews English","UCSrZ3UV4jOidv8ppoVuvW9Q"],
+  ["ABC News (EEUU)","UCBi2mrWuNuyYy4gbM6fU18Q"],
+  ["NBC News (EEUU)","UCeY0bbntWzzVIaj2z3QigXg"],
+  ["Bloomberg","UCIALMKvObZNtJ6AmdCLP7Lg"]
+];
+const DEFAULT=[0,2,7,1];
+const $=id=>document.getElementById(id);
+const store={get:k=>{try{return JSON.parse(localStorage.getItem("sala:"+k));}catch(e){return null;}},set:(k,v)=>{try{localStorage.setItem("sala:"+k,JSON.stringify(v));}catch(e){}}};
+
+// ---------- relojes ----------
+function clocks(){
+  const z=[["Madrid","Europe/Madrid"],["Londres","Europe/London"],["Nueva York","America/New_York"],["CDMX","America/Mexico_City"],["Caracas","America/Caracas"]];
+  $("clocks").innerHTML=z.map(([n,tz])=>`<div><b>${new Intl.DateTimeFormat("es-ES",{hour:"2-digit",minute:"2-digit",timeZone:tz}).format(new Date())}</b><span>${n}</span></div>`).join("");
+}
+clocks(); setInterval(clocks,20000);
+
+// ---------- muro de vídeo ----------
+const slots=store.get("slots")||DEFAULT;
+function tile(i){
+  const t=document.createElement("div"); t.className="tile";
+  const sel=document.createElement("select");
+  CHANNELS.forEach(([n],k)=>{const o=document.createElement("option");o.value=k;o.textContent=n;sel.append(o);});
+  sel.value=slots[i];
+  const f=document.createElement("iframe");
+  f.allow="autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen=true;
+  const load=()=>{ f.src=`https://www.youtube.com/embed/live_stream?channel=${CHANNELS[sel.value][1]}&autoplay=1&mute=1`; };
+  sel.onchange=()=>{slots[i]=Number(sel.value); store.set("slots",slots); load();};
+  load(); t.append(f,sel); return t;
+}
+slots.forEach((_,i)=>$("wall").append(tile(i)));
+
+// ---------- alertas en directo (ntfy) ----------
+let es=null, seen=new Set();
+function setState(on,txt){$("dot").className="dot"+(on?" on":"");$("stxt").textContent=txt;}
+function ago(s){const m=Math.round((Date.now()/1000-s)/60); if(m<1)return "ahora"; if(m<60)return `hace ${m} min`; return new Intl.DateTimeFormat("es-ES",{hour:"2-digit",minute:"2-digit"}).format(new Date(s*1000));}
+function add(m,fresh){
+  if(m.event!=="message"||seen.has(m.id)) return; seen.add(m.id);
+  const d=document.createElement("div"); d.className="alert p"+(m.priority||3)+(fresh?" new":""); d.dataset.time=m.time;
+  const t=document.createElement("div"); t.className="t"; t.textContent=m.title||m.message;
+  const x=document.createElement("div"); x.className="m"; x.textContent=m.title?m.message:"";
+  const w=document.createElement("div"); w.className="w"; w.textContent=ago(m.time);
+  d.append(t,x,w);
+  if(m.click){const a=document.createElement("a");a.href=m.click;a.target="_blank";a.rel="noopener";a.textContent=" Abrir ↗";w.append(a);}
+  const feed=$("feed");
+  const after=[...feed.children].find(c=>Number(c.dataset.time)<m.time);
+  feed.insertBefore(d,after||null);
+  while(feed.children.length>150) feed.lastChild.remove();
+}
+function setup(){
+  $("feed").innerHTML=`<div class="setup">Escribe el nombre de tu canal de alertas (el mismo que usas en ntfy). Solo se guarda en este navegador.<input id="topic" placeholder="alertas-…" autocomplete="off"><button id="go" type="button">Conectar</button></div>`;
+  $("go").onclick=()=>{const v=$("topic").value.trim(); if(v){store.set("topic",v); connect();}};
+}
+async function connect(){
+  const topic=store.get("topic"); if(!topic){setup();return;}
+  $("feed").innerHTML=""; seen=new Set();
+  try{
+    const r=await fetch(`https://ntfy.sh/${encodeURIComponent(topic)}/json?poll=1&since=12h`);
+    const txt=await r.text();
+    txt.trim().split("\n").filter(Boolean).map(l=>{try{return JSON.parse(l);}catch(e){return null;}}).filter(Boolean).forEach(m=>add(m,false));
+  }catch(e){}
+  if(es) es.close();
+  es=new EventSource(`https://ntfy.sh/${encodeURIComponent(topic)}/sse`);
+  es.onopen=()=>setState(true,"Alertas en directo");
+  es.onerror=()=>setState(false,"Reconectando…");
+  es.onmessage=e=>{try{add(JSON.parse(e.data),true);}catch(x){}};
+}
+setInterval(()=>document.querySelectorAll(".alert .w").forEach(w=>{const t=Number(w.parentNode.dataset.time); if(t){const a=w.querySelector("a"); w.firstChild&&w.firstChild.nodeType===3?w.firstChild.nodeValue=ago(t):w.prepend(document.createTextNode(ago(t)));}}),60000);
+$("reset").onclick=()=>{store.set("topic",null); if(es) es.close(); setState(false,"Desconectado"); setup();};
+connect();
+})();
+</script>
+</body>
+</html>
