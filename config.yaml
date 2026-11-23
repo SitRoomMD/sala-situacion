@@ -68,7 +68,7 @@ fuentes:
   - nombre: Europa, última hora
     lector: google_news
     tipo: noticias
-    query: '(Europa OR UE OR Francia OR Alemania OR Italia OR Bruselas) ("última hora" OR atentado OR explosión OR ataque OR evacuación OR "estado de emergencia" OR tiroteo)'
+    query: '(Europa OR UE OR Francia OR Alemania OR Italia OR Bruselas) (atentado OR explosión OR ataque OR evacuación OR "estado de emergencia" OR tiroteo)'
 
   - nombre: Reino Unido, última hora
     lector: google_news
@@ -80,7 +80,7 @@ fuentes:
   - nombre: EEUU, última hora
     lector: google_news
     tipo: noticias
-    query: '("Estados Unidos" OR EEUU OR Washington OR "Nueva York") ("última hora" OR atentado OR tiroteo OR explosión OR evacuación OR "estado de emergencia")'
+    query: '("Estados Unidos" OR EEUU OR Washington OR "Nueva York") (atentado OR tiroteo OR explosión OR evacuación OR "estado de emergencia")'
 
   - nombre: Atentados en el mundo
     lector: google_news
