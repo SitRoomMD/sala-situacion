@@ -15,7 +15,7 @@ permissions:
 jobs:
   vigilar:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 58
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -31,6 +31,8 @@ jobs:
       - run: python monitor.py
         env:
           NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          DURACION_MIN: "50"
+          INTERVALO_S: "120"
       - uses: actions/cache/save@v4
         if: always()
         with:
