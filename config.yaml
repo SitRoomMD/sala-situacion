@@ -25,10 +25,10 @@ fuentes:
     silenciosa: true
     query: '(UCO OR Anticorrupción OR "Audiencia Nacional" OR "concurso de acreedores" OR "registros en la sede") empresa'
 
-  - nombre: México, última hora
+  - nombre: México, solo lo grave
     lector: google_news
     tipo: emergencias
-    query: '(CDMX OR México) (sismo OR balacera OR explosión OR bloqueo OR evacuación OR "última hora")'
+    query: '(México OR CDMX) (atentado OR "coche bomba" OR masacre OR "toque de queda" OR "estado de emergencia" OR "alerta sísmica" OR terremoto OR huracán OR "aeropuerto cerrado" OR magnicidio OR "ataque con drones")'
     hl: es-419
     gl: MX
 
@@ -46,12 +46,12 @@ fuentes:
     magnitud_minima: 3.5
     magnitud_fuera_de_zona: 6.5
 
-  - nombre: Sismos en México M4,5+
+  - nombre: Sismos fuertes en México (M5,5+)
     lector: usgs
     tipo: sismos
     url: https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.geojson
     zonas: [mexico]
-    magnitud_minima: 4.5
+    magnitud_minima: 5.5
 
   - nombre: GDACS, catástrofes naranja y roja
     lector: rss
@@ -82,13 +82,6 @@ fuentes:
     tipo: noticias
     query: '("Estados Unidos" OR EEUU OR Washington OR "Nueva York") ("última hora" OR atentado OR tiroteo OR explosión OR evacuación OR "estado de emergencia")'
 
-  - nombre: Venezuela, última hora
-    lector: google_news
-    tipo: noticias
-    query: 'Venezuela ("última hora" OR explosión OR ataque OR protestas OR apagón OR detenidos OR militares OR sanciones OR elecciones)'
-    hl: es-419
-    gl: VE
-
   - nombre: Atentados en el mundo
     lector: google_news
     tipo: seguridad
@@ -110,6 +103,18 @@ fuentes:
     silenciosa: true
     query: '(elecciones OR comicios OR "adelanto electoral" OR "convocatoria electoral" OR "disolución de las Cortes" OR "elecciones autonómicas" OR "elecciones generales") España'
     window: 2h
+
+  - nombre: Drones, incidentes en España y Europa
+    lector: google_news
+    tipo: drones
+    query: '(dron OR drones) (aeropuerto OR "espacio aéreo" OR avistamiento OR ataque OR derribado OR "base militar" OR "infraestructura crítica" OR "central nuclear" OR incursión OR "cierre del aeropuerto")'
+
+  - nombre: Drones, incidentes en el mundo
+    lector: google_news
+    tipo: drones
+    query: '(drone OR drones) (airport OR airspace OR sighting OR attack OR "shot down" OR "military base" OR incursion OR "critical infrastructure")'
+    hl: en-GB
+    gl: GB
 
   # Canal público de Telegram: pon el nombre de t.me/NOMBRE y cambia activa a true
   - nombre: Canal de Telegram
