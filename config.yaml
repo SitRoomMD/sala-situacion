@@ -1,5 +1,5 @@
 # Zonas, fuentes y filtros de la sala de situación. Se puede editar con el lápiz.
-max_alertas_por_ciclo: 10
+max_alertas_por_ciclo: 15
 
 excluir_siempre: [horóscopo, lotería, quiniela, simulacro]
 
@@ -64,6 +64,52 @@ fuentes:
     tipo: meteo
     url: https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-spain
     incluir: [orange, red, naranja, rojo]
+
+  - nombre: Europa, última hora
+    lector: google_news
+    tipo: noticias
+    query: '(Europa OR UE OR Francia OR Alemania OR Italia OR Bruselas) ("última hora" OR atentado OR explosión OR ataque OR evacuación OR "estado de emergencia" OR tiroteo)'
+
+  - nombre: Reino Unido, última hora
+    lector: google_news
+    tipo: noticias
+    query: '(UK OR London OR England) ("major incident" OR attack OR explosion OR evacuation OR stabbing OR "terror" OR "breaking news")'
+    hl: en-GB
+    gl: GB
+
+  - nombre: EEUU, última hora
+    lector: google_news
+    tipo: noticias
+    query: '("Estados Unidos" OR EEUU OR Washington OR "Nueva York") ("última hora" OR atentado OR tiroteo OR explosión OR evacuación OR "estado de emergencia")'
+
+  - nombre: Venezuela, última hora
+    lector: google_news
+    tipo: noticias
+    query: 'Venezuela ("última hora" OR explosión OR ataque OR protestas OR apagón OR detenidos OR militares OR sanciones OR elecciones)'
+    hl: es-419
+    gl: VE
+
+  - nombre: Atentados en el mundo
+    lector: google_news
+    tipo: seguridad
+    query: '(atentado OR "ataque terrorista" OR "atentado terrorista" OR "coche bomba" OR "ataque yihadista")'
+
+  - nombre: Amenazas de bomba y desalojos
+    lector: google_news
+    tipo: seguridad
+    query: '("amenaza de bomba" OR "aviso de bomba" OR "artefacto explosivo" OR "paquete sospechoso" OR "desalojo por amenaza" OR TEDAX)'
+
+  - nombre: Catástrofes en el mundo
+    lector: google_news
+    tipo: catastrofes
+    query: '(terremoto OR tsunami OR huracán OR tifón OR erupción OR inundaciones OR "incendio forestal") (muertos OR víctimas OR evacuados OR desaparecidos)'
+
+  - nombre: Elecciones en España
+    lector: google_news
+    tipo: noticias
+    silenciosa: true
+    query: '(elecciones OR comicios OR "adelanto electoral" OR "convocatoria electoral" OR "disolución de las Cortes" OR "elecciones autonómicas" OR "elecciones generales") España'
+    window: 2h
 
   # Canal público de Telegram: pon el nombre de t.me/NOMBRE y cambia activa a true
   - nombre: Canal de Telegram
