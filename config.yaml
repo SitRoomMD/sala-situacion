@@ -1,0 +1,73 @@
+# Zonas, fuentes y filtros de la sala de situación. Se puede editar con el lápiz.
+max_alertas_por_ciclo: 10
+
+excluir_siempre: [horóscopo, lotería, quiniela, simulacro]
+
+# Zonas para sismos: [oeste, sur, este, norte]
+zonas:
+  espana: [-18.5, 27.4, 4.6, 44.0]
+  mexico: [-118.5, 14.3, -86.5, 32.8]
+
+fuentes:
+  - nombre: Madrid, sucesos y emergencias
+    lector: google_news
+    tipo: emergencias
+    query: 'Madrid (incendio OR explosión OR tiroteo OR apuñalado OR evacuación OR derrumbe OR apagón OR "corte de luz" OR atropello OR "última hora")'
+
+  - nombre: España, alertas graves
+    lector: google_news
+    tipo: emergencias
+    query: 'España (atentado OR explosión OR apagón OR evacuación OR "alerta roja" OR DANA OR "incendio forestal")'
+
+  - nombre: España, operaciones y procedimientos
+    lector: google_news
+    tipo: seguridad
+    silenciosa: true
+    query: '(UCO OR Anticorrupción OR "Audiencia Nacional" OR "concurso de acreedores" OR "registros en la sede") empresa'
+
+  - nombre: México, última hora
+    lector: google_news
+    tipo: emergencias
+    query: '(CDMX OR México) (sismo OR balacera OR explosión OR bloqueo OR evacuación OR "última hora")'
+    hl: es-419
+    gl: MX
+
+  - nombre: Europa Press
+    lector: rss
+    tipo: noticias
+    url: https://www.europapress.es/rss/rss.aspx
+    incluir: ["última hora", muere, muertos, herido, incendio, explosión, evacu, atentado, apagón, derrumbe]
+
+  - nombre: Sismos en España (y M6,5+ en el mundo)
+    lector: emsc
+    tipo: sismos
+    url: https://www.seismicportal.eu/fdsnws/event/1/query?format=json&limit=40&minmag=3
+    zonas: [espana]
+    magnitud_minima: 3.5
+    magnitud_fuera_de_zona: 6.5
+
+  - nombre: Sismos en México M4,5+
+    lector: usgs
+    tipo: sismos
+    url: https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_hour.geojson
+    zonas: [mexico]
+    magnitud_minima: 4.5
+
+  - nombre: GDACS, catástrofes naranja y roja
+    lector: rss
+    tipo: catastrofes
+    url: https://www.gdacs.org/xml/rss.xml
+    incluir: [orange, red]
+
+  - nombre: Meteoalarm, avisos naranja y rojo
+    lector: rss
+    tipo: meteo
+    url: https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-spain
+    incluir: [orange, red, naranja, rojo]
+
+  # Canal público de Telegram: pon el nombre de t.me/NOMBRE y cambia activa a true
+  - nombre: Canal de Telegram
+    lector: telegram
+    tipo: telegram
+    channel: NOMBRE_DEL_CANAL
+    activa: false
