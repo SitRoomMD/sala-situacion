@@ -99,7 +99,7 @@ const store={get:k=>{try{return JSON.parse(localStorage.getItem("sala:"+k));}cat
 
 // ---------- relojes ----------
 function clocks(){
-  const z=[["Madrid","Europe/Madrid"],["Londres","Europe/London"],["Nueva York","America/New_York"],["CDMX","America/Mexico_City"],["Caracas","America/Caracas"]];
+  const z=[["Madrid","Europe/Madrid"],["Londres","Europe/London"],["Nueva York","America/New_York"],["CDMX","America/Mexico_City"]];
   $("clocks").innerHTML=z.map(([n,tz])=>`<div><b>${new Intl.DateTimeFormat("es-ES",{hour:"2-digit",minute:"2-digit",timeZone:tz}).format(new Date())}</b><span>${n}</span></div>`).join("");
 }
 clocks(); setInterval(clocks,20000);
@@ -125,6 +125,7 @@ function setState(on,txt){$("dot").className="dot"+(on?" on":"");$("stxt").textC
 function ago(s){const m=Math.round((Date.now()/1000-s)/60); if(m<1)return "ahora"; if(m<60)return `hace ${m} min`; return new Intl.DateTimeFormat("es-ES",{hour:"2-digit",minute:"2-digit"}).format(new Date(s*1000));}
 function add(m,fresh){
   if(m.event!=="message"||seen.has(m.id)) return; seen.add(m.id);
+  if(/venezuel|caracas|maduro|chavis/i.test((m.title||"")+" "+(m.message||""))) return;
   const d=document.createElement("div"); d.className="alert p"+(m.priority||3)+(fresh?" new":""); d.dataset.time=m.time;
   const t=document.createElement("div"); t.className="t"; t.textContent=m.title||m.message;
   const x=document.createElement("div"); x.className="m"; x.textContent=m.title?m.message:"";
