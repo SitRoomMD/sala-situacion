@@ -1,7 +1,10 @@
 # Zonas, fuentes y filtros de la sala de situación. Se puede editar con el lápiz.
-max_alertas_por_ciclo: 15
+max_alertas_por_ciclo: 8
 
-excluir_siempre: [horóscopo, lotería, quiniela, simulacro]
+excluir_siempre: [venezuel, caracas, maduro, chavis, horóscopo, lotería, quiniela, simulacro,
+  fútbol, futbol, liga, champions, nba, nfl, "premier league", lineup, "team news", concierto, concert,
+  película, festival, estreno, premios, awards, receta, moda, fashion, celebrity, famoso, famosa,
+  bolsa, acciones, nvidia, "box office", serie de, review, horror fest]
 
 # Zonas para sismos: [oeste, sur, este, norte]
 zonas:
@@ -13,17 +16,20 @@ fuentes:
     lector: google_news
     tipo: emergencias
     query: 'Madrid (incendio OR explosión OR tiroteo OR apuñalado OR evacuación OR derrumbe OR apagón OR "corte de luz" OR atropello OR "última hora")'
+    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
 
   - nombre: España, alertas graves
     lector: google_news
     tipo: emergencias
     query: 'España (atentado OR explosión OR apagón OR evacuación OR "alerta roja" OR DANA OR "incendio forestal")'
+    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
 
   - nombre: España, operaciones y procedimientos
     lector: google_news
     tipo: seguridad
     silenciosa: true
     query: '(UCO OR Anticorrupción OR "Audiencia Nacional" OR "concurso de acreedores" OR "registros en la sede") empresa'
+    incluir: [uco, anticorrupción, "audiencia nacional", concurso, registr, detenid, imputad, investigad]
 
   - nombre: México, solo lo grave
     lector: google_news
@@ -31,6 +37,7 @@ fuentes:
     query: '(México OR CDMX) (atentado OR "coche bomba" OR masacre OR "toque de queda" OR "estado de emergencia" OR "alerta sísmica" OR terremoto OR huracán OR "aeropuerto cerrado" OR magnicidio OR "ataque con drones")'
     hl: es-419
     gl: MX
+    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
 
   - nombre: Europa Press
     lector: rss
@@ -65,37 +72,43 @@ fuentes:
     url: https://feeds.meteoalarm.org/feeds/meteoalarm-legacy-atom-spain
     incluir: [orange, red, naranja, rojo]
 
-  - nombre: Europa, última hora
+  - nombre: Europa, incidentes graves
     lector: google_news
     tipo: noticias
     query: '(Europa OR UE OR Francia OR Alemania OR Italia OR Bruselas) (atentado OR explosión OR ataque OR evacuación OR "estado de emergencia" OR tiroteo)'
+    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
 
-  - nombre: Reino Unido, última hora
+  - nombre: Reino Unido, incidentes graves
     lector: google_news
     tipo: noticias
     query: '(UK OR London OR England) ("major incident" OR attack OR explosion OR evacuation OR stabbing OR "terror" OR "breaking news")'
     hl: en-GB
     gl: GB
+    incluir: [attack, explosion, blast, shooting, shot, stabb, evacuat, terror, bomb, drone, emergency, killed, dead, injured, "major incident", lockdown, hostage, fire]
 
-  - nombre: EEUU, última hora
+  - nombre: EEUU, incidentes graves
     lector: google_news
     tipo: noticias
     query: '("Estados Unidos" OR EEUU OR Washington OR "Nueva York") (atentado OR tiroteo OR explosión OR evacuación OR "estado de emergencia")'
+    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
 
   - nombre: Atentados en el mundo
     lector: google_news
     tipo: seguridad
     query: '(atentado OR "ataque terrorista" OR "atentado terrorista" OR "coche bomba" OR "ataque yihadista")'
+    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
 
   - nombre: Amenazas de bomba y desalojos
     lector: google_news
     tipo: seguridad
     query: '("amenaza de bomba" OR "aviso de bomba" OR "artefacto explosivo" OR "paquete sospechoso" OR "desalojo por amenaza" OR TEDAX)'
+    incluir: [bomba, explosivo, sospechoso, desalo, tedax]
 
   - nombre: Catástrofes en el mundo
     lector: google_news
     tipo: catastrofes
     query: '(terremoto OR tsunami OR huracán OR tifón OR erupción OR inundaciones OR "incendio forestal") (muertos OR víctimas OR evacuados OR desaparecidos)'
+    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
 
   - nombre: Elecciones en España
     lector: google_news
@@ -103,11 +116,13 @@ fuentes:
     silenciosa: true
     query: '(elecciones OR comicios OR "adelanto electoral" OR "convocatoria electoral" OR "disolución de las Cortes" OR "elecciones autonómicas" OR "elecciones generales") España'
     window: 2h
+    incluir: [elecciones, comicios, electoral, "las cortes", urnas]
 
   - nombre: Drones, incidentes en España y Europa
     lector: google_news
     tipo: drones
     query: '(dron OR drones) (aeropuerto OR "espacio aéreo" OR avistamiento OR ataque OR derribado OR "base militar" OR "infraestructura crítica" OR "central nuclear" OR incursión OR "cierre del aeropuerto")'
+    incluir: [atentad, explosi, tiroteo, dispar, apuñal, evacu, incendi, derrumb, apagón, "corte de luz", muert, herid, ataque, terror, bomba, dron, emergencia, alerta, terremoto, sismo, huracán, inundaci, desalojo, rehen, secuestr]
 
   - nombre: Drones, incidentes en el mundo
     lector: google_news
@@ -115,6 +130,7 @@ fuentes:
     query: '(drone OR drones) (airport OR airspace OR sighting OR attack OR "shot down" OR "military base" OR incursion OR "critical infrastructure")'
     hl: en-GB
     gl: GB
+    incluir: [attack, explosion, blast, shooting, shot, stabb, evacuat, terror, bomb, drone, emergency, killed, dead, injured, "major incident", lockdown, hostage, fire]
 
   # Canal público de Telegram: pon el nombre de t.me/NOMBRE y cambia activa a true
   - nombre: Canal de Telegram
