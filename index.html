@@ -65,7 +65,7 @@ h1{margin:0;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:v
   .layout{display:block;height:calc(100% - 46px - 58px - env(safe-area-inset-bottom,0px));overflow:hidden}
   .main,.side{display:contents}
   .wall,#map,.side>h2,.feed,.extra{display:none}
-  body[data-tab=tv] .wall{display:grid;grid-template-columns:1fr;grid-auto-rows:auto;align-content:start;padding:0;gap:0}
+  body[data-tab=tv] .wall{display:grid;grid-template-columns:1fr;grid-auto-rows:auto;align-content:start;padding:0;gap:4px;height:100%;overflow-y:auto}
   body[data-tab=tv] .tile{aspect-ratio:16/9;border-radius:0;border:0}
   body[data-tab=mapa] #map{display:block;height:100%;margin:0;border:0;border-radius:0}
   body[data-tab=alertas] .side>h2{display:flex}
@@ -73,6 +73,9 @@ h1{margin:0;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:v
   body[data-tab=ind] .extra{display:flex;height:100%;border-top:0}
   .tile select{font-size:14px;padding:6px 8px}
   .tabbar{display:flex}
+}
+@media (max-width:900px) and (orientation:landscape){
+  body[data-tab=tv] .wall{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -144,9 +147,9 @@ function tile(i){
   f.allow="autoplay; encrypted-media; picture-in-picture; fullscreen"; f.allowFullscreen=true;
   const load=()=>{ f.src=`https://www.youtube.com/embed/live_stream?channel=${CHANNELS[sel.value][1]}&autoplay=1&mute=1`; };
   sel.onchange=()=>{slots[i]=Number(sel.value); store.set("slots",slots); load();};
-  load(); t.append(f,sel); if(i===0) window._tv={f,load}; return t;
+  load(); t.append(f,sel); (window._tvs=window._tvs||[]).push({f,load}); return t;
 }
-slots.forEach((_,i)=>{ if(MOBILE&&i>0) return; $("wall").append(tile(i)); });
+slots.forEach((_,i)=>$("wall").append(tile(i)));
 
 // ---------- alertas en directo (ntfy) ----------
 let es=null, seen=new Set();
@@ -251,7 +254,7 @@ function badge(){ const s=document.querySelector('.tabbar [data-t="alertas"] .n'
 function setTab(t){
   tab=t; document.body.dataset.tab=t;
   document.querySelectorAll(".tabbar button").forEach(b=>b.classList.toggle("on",b.dataset.t===t));
-  if(window._tv){ if(t==="tv") window._tv.load(); else window._tv.f.src="about:blank"; }
+  (window._tvs||[]).forEach(v=>{ if(t==="tv") v.load(); else v.f.src="about:blank"; });
   if(t==="mapa"&&mapa) setTimeout(()=>mapa.invalidateSize(),60);
   if(t==="alertas"){ nuevas=0; badge(); }
 }
